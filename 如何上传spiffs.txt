@@ -5,3 +5,4 @@ build_flags = -Wl,-Teagle.flash.4m1m.ld
 
 2.在终端中输入以下命令即可将./data目录中的文件写入spiffs中。
 platformio run --target uploadfs
+或者点击vscode的左侧工具图标中的platformIO，在Project Tasks中点击[Upload File System image]
