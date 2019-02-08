@@ -7,8 +7,8 @@
 
 const char *targetLanguage = "zh";
 const String host = "http://api.fanyi.baidu.com/api/trans/vip/translate";
-const String appid = "20190120000257962";
-const String apiKey = "a7YX_Rr5O_aJxyD1GWWG";
+const String appid = "xxxxxxxxxxxxxxxxxxx";
+const String apiKey = "xxxxxxxxxxxxxxxxxxxx";
 
 StaticJsonBuffer<2048> baiduJsonBuffer;
 
