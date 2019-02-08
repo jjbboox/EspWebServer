@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 const String host = "http://api.fanyi.baidu.com/api/trans/vip/translate";
-const String appid = "20190120000257962";
-const String apiKey = "a7YX_Rr5O_aJxyD1GWWG";
+const String appid = "xxxxxxxxxxxxxxxxx";
+const String apiKey = "xxxxxxxxxxxxxxxxxxx";
 
 #endif  // _BAIDU_TRANSLATE_H_
