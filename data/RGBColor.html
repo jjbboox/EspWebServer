@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<link rel="stylesheet" href="style.css"> <!-- Resource style -->
+	<script src="init.js"></script> <!-- Modernizr -->
+	<script defer="defer">
+        function setRGBLedColor(inputColor) {
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    
+                }
+            };
+            xmlhttp.open("POST", "SetRGBColor", true);
+            xmlhttp.send("Color=" + inputColor.value);
+        };
+	</script>
+	<title>Esp8266 Home Center | jjbboox</title>
+</head>
+<body>
+	
+	<main>
+		<h1 class="title">RGB LED灯控制台</h1>
+		<center>
+			<ul class="row">
+				<li class="col" style="color:white;"><h2>RGB颜色</h2><p><input type="color" id="RGBColor" onchange="setRGBLedColor(this);"></input></p></li>
+			</ul>
+		</center>
+		<!-- all your content here -->
+	</main>
+	
+</body>
+</html>

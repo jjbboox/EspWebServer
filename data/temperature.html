@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<link rel="stylesheet" href="style.css"> <!-- Resource style -->
+	<script defer="defer">
+		window.onload = function () {
+			//循环执行，每隔1秒钟执行一次 1000 
+			var t1 = window.setInterval(refreshTemperature, 5000);
+			function refreshTemperature() {
+				var xmlhttp;
+				if (window.XMLHttpRequest) {
+					xmlhttp = new XMLHttpRequest();
+				} else {
+					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xmlhttp.onreadystatechange = function () {
+					var temperature = document.getElementById("Temperature");
+					var Humidity = document.getElementById("Humidity");
+					var computeHeat = document.getElementById("ComputeHeat");
+					if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+						temperature.innerHTML = obj["temperature"];
+						Humidity.innerHTML = obj["Humidity"];
+						computeHeat.innerHTML = obj["computeHeat"];
+					}
+				};
+				xmlhttp.open("GET", "getTemperature", true);
+				xmlhttp.send();
+			}
+			// 去掉定时器的方法  
+			// window.clearInterval(t1);   
+		};
+	</script>
+	<title>3D Rotating Navigation | CodyHouse</title>
+</head>
+<body>
+	
+	<main>
+		<center><h1>温度、湿度监控</h1>
+			<ul class="data_row">
+				<li class="data_label">
+					当前室内温度
+				</li>
+				<li class="data_value" id="Temperature">
+
+				</li>
+			</ul>
+			<ul class="data_row">
+				<li class="data_label">
+					当前室内温度
+				</li>
+				<li class="data_value" id="Humidity">
+
+				</li>
+			</ul>
+			<ul class="data_row">
+				<li class="data_label">
+					体感温度
+				</li>
+				<li class="data_value" id="ComputeHeat">
+
+				</li>
+			</ul>
+		</center>
+	</main>
+	
+</body>
+</html>

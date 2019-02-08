@@ -1,0 +1,157 @@
+body {
+    padding: 5px 10px 5px 10px;
+    color: cornflowerblue;
+}
+
+h3 {
+    font-size: x-large;
+}
+p {
+    font-size: large;
+    padding: 10px 0px 5px;
+}
+.inputCtrl {
+    background-color: floralwhite;
+    color: firebrick;
+}
+select,textarea {
+    width: 100%;
+    font-size: medium;
+    color: cornflowerblue;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    border: 2px solid cornflowerblue;
+}
+textarea {
+    height: 160px;
+    font-size: large;
+}
+button {
+    font-size: large;
+    color: cornflowerblue;
+    padding: 5px 10px 5px 10px; 
+    border-radius: 5px;
+    border: 5px solid cornflowerblue;
+}
+.response {
+    font-size: x-large;
+    font-style:italic;
+    font-weight:bold;
+    color: rgb(255, 254, 168);
+}
+.Success {
+    color: rgb(196, 255, 168);
+}
+.Error {
+    color: rgb(255, 158, 158);
+}
+.ledon {
+    background-color: blue;
+    color: white;
+    padding: 5px 10px 5px 10px;
+}
+.ledoff {
+    background-color: darkgrey;
+    color: white;
+    padding: 5px 10px 5px 10px;
+}
+hr {
+    border-style:dotted;
+    border-width:thin;
+}
+
+.flexBox {
+    width: 100%;
+	display: flex;
+}
+
+.inputRow {
+	list-style:none;
+    display:flex;
+    width: 100%;
+}
+
+.label {
+    background-color: blue;
+    color: white;
+}
+
+.cinput {
+    flex: 2;
+    background-color: white;
+    color: cornflowerblue;
+}
+
+.data {
+    width: 80%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+ul {
+    display:flex;
+    width: 80%;
+}
+
+li .label {
+    background-color: blue;
+    color: white;
+    width: 110px;
+    flex: 1;
+}
+
+.datarow {
+    height: 30px;
+}
+
+.cvalue {
+    margin: auto;
+    font-size: large;
+    color: white;
+}
+
+.label {
+    font-size: large;
+    width: 110px;
+    margin: auto;
+    color:white;
+    background-color: blue;
+}
+
+.logline {
+    display:flex;
+    width:100%;
+}
+
+.logline .datetime {
+    flex:3;
+    text-align:left;
+    padding: 3px 10px 3px 10px;
+}
+
+.logline .mins {
+    flex:1;
+    padding: 3px 10px 3px 10px;
+    color:white;
+}
+
+.title {
+    margin: 2em auto;
+}
+
+.row {
+    display: flex;
+    align-content: space-around;
+    margin: 2em;
+}
+
+.col {
+    flex: 1;
+    padding: 2em;
+}
+
+h2 {
+    font-size: x-large;
+    padding-top: 5;
+    padding-bottom: 15;
+}

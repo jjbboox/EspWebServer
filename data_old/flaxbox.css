@@ -1,0 +1,41 @@
+body {
+	align-items: stretch;
+}
+
+.form-row {
+	padding: 5 10;
+	display: flex;
+}
+
+.form-row input {
+	flex: 1;
+}
+
+section {
+	border: 1px;
+	background-color: rgba(17, 0, 255, 0.747);
+	width: 80%;
+	color: white;
+}
+
+.as--start {
+	align-self: center;
+}
+
+nav {
+	display: flex;
+}
+
+.ml-auto {
+	margin-left: auto;
+}
+
+ul {
+	list-style:none;
+	display:flex;
+}
+
+ul li {
+	width:80px;
+	flex: 1;
+}

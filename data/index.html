@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
+	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<script src="js/modernizr.js"></script> <!-- Modernizr -->
+  	
+	<title>3D Rotating Navigation | CodyHouse</title>
+</head>
+<body>
+	<header class="cd-header">
+		<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>
+		<a href="#0" class="cd-3d-nav-trigger">
+			Menu
+			<span></span>
+		</a>
+	</header> <!-- .cd-header -->
+	
+	
+		<iframe id="mainFrame" src="Home.html" style="width:100%;"></iframe>
+		<!-- all your content here -->
+	
+	
+	<nav class="cd-3d-nav-container">
+		<ul class="cd-3d-nav">
+			<li class="cd-selected">
+				<a href="#0" onclick="setmainframe('Home.html');"><font color=white>Home</font></a>
+			</li>
+
+			<li>
+				<a href="#0" onclick="setmainframe('Translator.html');"><font color=white>百度翻译</font></a>
+			</li>
+
+			<li>
+				<a href="#0" onclick="setmainframe('Dht11.html');"><font color=white>室温监测</font></a>
+			</li>
+
+			<li>
+				<a href="#0" onclick="setmainframe('Pir.html');"><font color=white>活动监测</font></a>
+			</li>
+
+			<li>
+				<a href="#0" onclick="setmainframe('RGBColor.html');"><font color=white>调色板</font></a>
+			</li>
+		</ul> <!-- .cd-3d-nav -->
+
+		<span class="cd-marker color-1"></span>	
+	</nav> <!-- .cd-3d-nav-container -->
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/main.js"></script> <!-- Resource jQuery -->
+<script>
+	function setFrameHeight() {
+		document.getElementById('mainFrame').height = window.innerHeight - 90;
+	}
+	window.onresize = function() {
+		setFrameHeight();
+	}
+	window.onload = function () {
+		setFrameHeight();
+	};
+	function setmainframe(url) {
+		document.getElementById('mainFrame').src = url;
+		setFrameHeight();
+		// setIframeHeight(document.getElementById('mainFrame'));
+	};
+</script>
+
+</body>
+</html>
