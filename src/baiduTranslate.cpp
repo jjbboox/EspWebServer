@@ -4,11 +4,9 @@
 #include "urlencode.h"
 #include <ArduinoJson.h>
 #include "unitoutf8.h"
+#include "baiduTranslate.h"
 
 const char *targetLanguage = "zh";
-const String host = "http://api.fanyi.baidu.com/api/trans/vip/translate";
-const String appid = "xxxxxxxxxxxxxxxxxxx";
-const String apiKey = "xxxxxxxxxxxxxxxxxxxx";
 
 StaticJsonBuffer<2048> baiduJsonBuffer;
 
