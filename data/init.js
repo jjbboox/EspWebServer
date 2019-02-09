@@ -34,5 +34,5 @@ xmlhttp.send();
 
 function setLEDButton(btnLed, stateValue) {
     btnLed.className = stateValue == "on" ? "ledon" : "ledoff";
-    btnLed.innerHTML = stateValue == "on" ? "关闭板载LED灯" : "打开板载LED灯";
+    btnLed.value = stateValue == "on" ? "关闭板载LED灯" : "打开板载LED灯";
 };

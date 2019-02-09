@@ -45,6 +45,8 @@ button {
 .Error {
     color: rgb(255, 158, 158);
 }
+
+/*
 .ledon {
     background-color: blue;
     color: white;
@@ -55,6 +57,8 @@ button {
     color: white;
     padding: 5px 10px 5px 10px;
 }
+*/
+
 hr {
     border-style:dotted;
     border-width:thin;
@@ -71,15 +75,10 @@ hr {
     width: 100%;
 }
 
-.label {
-    background-color: blue;
-    color: white;
-}
-
 .cinput {
-    flex: 2;
-    background-color: white;
-    color: cornflowerblue;
+    background: rgba(219, 101, 22, 0.753);
+    color: white;
+    vertical-align: middle;
 }
 
 .data {
@@ -101,13 +100,17 @@ li .label {
 }
 
 .datarow {
-    height: 30px;
+    height: 40px;
 }
 
 .cvalue {
     margin: auto;
     font-size: large;
     color: white;
+    vertical-align: middle;
+    background: rgb(141, 0, 0);
+    border: 1px solid white;
+    border-radius: 10px;
 }
 
 .label {
@@ -115,7 +118,10 @@ li .label {
     width: 110px;
     margin: auto;
     color:white;
-    background-color: blue;
+    background-color: rgb(40, 128, 20);
+    vertical-align: middle;
+    border-radius: 10px;
+    border: 1px solid white;
 }
 
 .logline {
@@ -154,4 +160,59 @@ h2 {
     font-size: x-large;
     padding-top: 5;
     padding-bottom: 15;
+}
+
+.box {
+    margin: 200px auto;
+    width: 300px;
+    padding: 40px;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+}
+.box h1 {
+    color: white;
+    /*text-transform: uppercase;*/
+    font-weight: 500;
+
+}
+.box input[type='button'] {
+    font-size: larger;
+    border: 0;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid rgb(64, 64, 255);
+    padding: 14px 40px;
+    outline: none;
+    color : white;
+    border-radius : 30px;
+    transition: 0.25s;
+    cursor: pointer;
+
+}
+
+.ledon {
+    background: rgb(96, 64, 255);
+}
+
+.ledoff {
+    background: none;
+}
+/*
+.ledon:hover {
+    background: none;
+}
+
+.ledoff:hover {
+    background: #2ecc71;
+}
+*/
+
+.dht li {
+    border-radius: 70% 30%;
+    color: white;
 }

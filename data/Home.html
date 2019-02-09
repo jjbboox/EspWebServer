@@ -8,15 +8,40 @@
 
 	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
 	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
-		
+	<link rel="stylesheet" href="style.css"> <!-- Resource style -->
+	<script src="init.js"></script>
+	<script defer="defer">
+		function ledSwitch() {
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var stateValue = xmlhttp.responseText;
+                    setLEDButton(document.getElementById("btnLed"), stateValue);
+                    // showReturnMsg("Success", "操作成功");
+                }
+                else if (xmlhttp.readyState == 4) {
+					// showReturnMsg("Error", "操作失败");
+				}
+            };
+            // showReturnMsg("Info", "正在发送操作指令...");
+            xmlhttp.open("GET", "Switch", true);
+            xmlhttp.send();
+        };
+	</script>
 	<title>Esp8266 Home Center | jjbboox</title>
 </head>
 <body>
 	
 	<main>
-		<h1 class="title">Esp8266 智能家电控制中心</h1>
-
-		<p></p>
+		<form class='box' >
+			<h1>板载LED灯</h1>
+			<input type="button" id="btnLed" value="打开" onclick="ledSwitch()">
+		</form>
 		<!-- all your content here -->
 	</main>
 	
