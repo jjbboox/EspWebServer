@@ -13,33 +13,82 @@
 
 	<title>Esp8266 Home Center | jjbboox</title>
 	<script src="init.js"></script>
+	<script src="js/jquery.js"></script>
 	<script defer="defer">
-		function doTranslate(ele, language, target) {
-			if (ele.value == undefined || ele.value.trim() == "") {
-				target.innerHTML = "";
+		const sourceTextSelect = "#srcText";
+		const langObjectSelect = "#language";
+		const targetObjectSelect = "#targetText";
+		const infoObjectSelect = "#responseState";
+		function doTranslate() {
+			let textObj = $(sourceTextSelect);
+			if($.trim(textObj.val()) == "") {
+				$(targetObjectSelect).html("");
+				showReturnMsg("Error", "请输入需要翻译的内容");
 				return;
 			}
-			var xmlhttp;
-			if (window.XMLHttpRequest) {
-				xmlhttp = new XMLHttpRequest();
-			} else {
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			let langObj = $(langObjectSelect);
+			let language = langObj.val();
+			if(language == undefined || language == "") {
+				language = "zh";
 			}
-			xmlhttp.onreadystatechange = function () {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					target.innerHTML = xmlhttp.responseText;
-					showReturnMsg("Success", "翻译成功");
+			// 调用ESPServer的Translate API获取百度翻译API的APPId和Key
+			$.post("Translate", {
+				lang: language,
+				text: textObj.val()
+			}, function(data, status){
+				switch(status) {
+					case "success":
+						if(data.Type == 'object') {
+							const {url, params} = data.Value;
+							// 不知道为什么使用Json返回后的翻译原文调用API会出现param error
+							// 所以在调用百度翻译API之前，使用前端用户输入的文本替换掉参数q
+							params.q = textObj.val();
+							// 调用百度翻译API，获取翻译后的文本
+							$.ajax({
+								url : url,
+								type : 'get',
+								dataType: 'jsonp',
+								data: params,
+								success : function(data) {
+									const results = data.trans_result;
+									$(targetObjectSelect).html(results.map((result) => `
+										<p>${result.dst}</p>
+									`).join(''));
+									showReturnMsg("Success", "翻译成功");
+								},
+								error: function(data) {
+									showReturnMsg("Error", "翻译失败");
+								}
+							});
+						}
+						else if(data.Type === 'string') {
+							$(targetObjectSelect).html(data.Value);
+							showReturnMsg("Success", "翻译成功");
+						}
+						break;
+					default:
+						$(targetObjectSelect).html("");
+						showReturnMsg("Error", "翻译失败");
+						break;
 				}
-				else if (xmlhttp.readyState == 4 && ele.value != "") showReturnMsg("Error", "翻译失败");
-			};
+			});
 			showReturnMsg("Info", "正在努力翻译中...");
-			xmlhttp.open("POST", "Translate", true);
-			xmlhttp.send("lang=" + language.options[language.selectedIndex].value + "&text=" + ele.value);
-		};
+		}
+		$(document).ready(function(){
+			$(langObjectSelect).change(function(){
+				doTranslate();
+			});
+			$(sourceTextSelect).change(function(){
+				doTranslate();
+			});
+			$("#btnclipboard").click(function(){
+				copyToClipboard($(targetObjectSelect)[0]);
+			});
+		});
 		function showReturnMsg(type, msg) {
-			obj = document.getElementById("responseState");
-			obj.innerHTML = msg;
-			obj.className = type;
+			var obj = $(infoObjectSelect);
+			obj.html(msg);
+			obj.toggleClass(type);
 		};
 		function copyToClipboard(ele) {
 			var val = ele.innerHTML;
@@ -66,11 +115,11 @@
 			<div style="text-align:left;width:80%">
 				<p>请输入需要翻译的文本:</p>
 				<p>
-					<textarea class=inputCtrl id=srcText onchange="doTranslate(this, document.getElementById('language'), document.getElementById('targetText'))"></textarea>
+					<textarea class=inputCtrl id=srcText></textarea>
 				</p>
 				<p>目标语言: </p>
 				<p>
-					<select class=inputCtrl id=language onchange="doTranslate(document.getElementById('srcText'), this, document.getElementById('targetText'))">
+					<select class=inputCtrl id=language>
 						<option value="zh">中文</option>
 						<option value="en">English - 英语</option>
 						<option value="yue">粤语</option>
@@ -102,19 +151,19 @@
 					</select>
 				</p>
 
-				<p><label for="targetText">译文：</p>
+				<p><label for="targetText" title="双击译文内容可复制到剪贴板">译文：</p>
 				<h3>
 					<span class="response" id="targetText"></span>
 				</h3>
 				<p>
-					<button type="button" id=btnclipboard onclick="copyToClipboard(document.getElementById('targetText'))">复制到剪贴板</button>
+					<button type="button" id=btnclipboard>复制到剪贴板</button>
 				</p>
 				<p></p>
 				<label for="responseState">反馈：</label><span class="rtnOK" id="responseState"></span>
 			</div>
-			
+
 		</center>
-		
+
 		<!-- all your content here -->
 	</main>
 

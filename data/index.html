@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="zh" class="no-js">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,10 +9,63 @@
 
 	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
 	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<style type="text/css">
+		.datarow {
+			height: 40px;
+		}
+
+		.data-row-value {
+			text-align: left;
+			padding-right: 10px;
+			vertical-align: middle;
+		}
+
+		.data-row-title {
+			text-align: right;
+			padding-left: 10px;
+			vertical-align: middle;
+		}
+	</style>
 	<script src="js/modernizr.js"></script> <!-- Modernizr -->
-  	
+	<script src="js/jquery.js"></script>
+	<script defer="defer">
+		$(document).ready(function(){
+			$.get("/HeWeather", function(key){
+				$.getJSON("https://free-api.heweather.net/s6/weather?location=auto_ip&key=" + key, function(jsonObj){
+					// let basic = jsonObj.HeWeather6[0].basic;
+					const [weather] = jsonObj.HeWeather6;
+					const {basic, now} = weather;
+					if(basic) {
+						$("#weather_location").html(basic.location);
+					}
+					const [df] = weather.daily_forecast;
+					if(df) {
+						const {
+							cond_code_d, 
+							cond_txt_d, 
+							cond_txt_n, 
+							tmp_max, 
+							tmp_min,
+							wind_dir,
+							wind_sc
+						} = df;
+						const $wi = $("#weather_icon");
+						$wi.attr("src",`img/heWeather/${cond_code_d}.png`);
+						$wi.attr("title", `白天:${cond_txt_d} / 夜间:${cond_txt_n}`);
+						$('#weather_t').html(`${tmp_max}℃ / ${tmp_min}℃`);
+						$("#weather_wind").html(`${wind_dir}  ${wind_sc}`);
+					}
+					// let now = jsonObj.HeWeather6[0].now;
+					if(now) {
+						$('#now_hum').html(`${now.hum}%`);
+					}
+				});
+			});
+		});
+	</script>
 	<title>Esp8266 Web Server | jjbboox</title>
 </head>
+
 <body>
 	<header class="cd-header">
 		<a href="#0" class="cd-logo"><img src="img/cd-logo.svg" alt="Logo"></a>
@@ -19,56 +73,76 @@
 			Menu
 			<span></span>
 		</a>
+		<table class="data" style="margin: auto;color:white;">
+			<tr class="datarow">
+				<td id="weather_location" class='data-row-title'></td>
+				<td class='data-row-value'>
+					<img id='weather_icon' width="32" height="32" title="">
+				</td>
+				<td class='data-row-title'>气温：</td><td id="weather_t" class='data-row-value'></td>
+				<td class='data-row-title'>风：</td><td id="weather_wind" class='data-row-value'></td>
+				<td class='data-row-title'>湿度：</td><td id="now_hum" class='data-row-value'></td>
+			</tr>
+		</table>
 	</header> <!-- .cd-header -->
-	
-	
-		<iframe id="mainFrame" src="home.html" style="width:100%;"></iframe>
-		<!-- all your content here -->
-	
-	
+
+
+	<iframe id="mainFrame" src="home.html" style="width:100%;"></iframe>
+	<!-- all your content here -->
+
+
 	<nav class="cd-3d-nav-container">
 		<ul class="cd-3d-nav">
 			<li class="cd-selected">
-				<a href="#0" onclick="setmainframe('home.html');"><font color=white>Home</font></a>
+				<a href="#0" onclick="setmainframe('home.html');">
+					<font color=white>Home</font>
+				</a>
 			</li>
 
 			<li>
-				<a href="#0" onclick="setmainframe('translator.html');"><font color=white>百度翻译</font></a>
+				<a href="#0" onclick="setmainframe('translator.html');">
+					<font color=white>百度翻译</font>
+				</a>
 			</li>
 
 			<li>
-				<a href="#0" onclick="setmainframe('dht11.html');"><font color=white>室温监测</font></a>
+				<a href="#0" onclick="setmainframe('dht11.html');">
+					<font color=white>室温监测</font>
+				</a>
 			</li>
 
 			<li>
-				<a href="#0" onclick="setmainframe('pir.html');"><font color=white>活动监测</font></a>
+				<a href="#0" onclick="setmainframe('pir.html');">
+					<font color=white>活动监测</font>
+				</a>
 			</li>
 
 			<li>
-				<a href="#0" onclick="setmainframe('rgbcolor.html');"><font color=white>调色板</font></a>
+				<a href="#0" onclick="setmainframe('rgbcolor.html');">
+					<font color=white>调色板</font>
+				</a>
 			</li>
 		</ul> <!-- .cd-3d-nav -->
 
-		<span class="cd-marker color-1"></span>	
+		<span class="cd-marker color-1"></span>
 	</nav> <!-- .cd-3d-nav-container -->
-<script src="js/jquery-2.1.1.js"></script>
-<script src="js/main.js"></script> <!-- Resource jQuery -->
-<script>
-	function setFrameHeight() {
-		document.getElementById('mainFrame').height = window.innerHeight - 90;
-	}
-	window.onresize = function() {
-		setFrameHeight();
-	}
-	window.onload = function () {
-		setFrameHeight();
-	};
-	function setmainframe(url) {
-		document.getElementById('mainFrame').src = url;
-		setFrameHeight();
-		// setIframeHeight(document.getElementById('mainFrame'));
-	};
-</script>
+	<script src="js/main.js"></script> <!-- Resource jQuery -->
+	<script>
+		function setFrameHeight() {
+			document.getElementById('mainFrame').height = window.innerHeight - 90;
+		}
+		window.onresize = function () {
+			setFrameHeight();
+		}
+		window.onload = function () {
+			setFrameHeight();
+		}
+		function setmainframe(url) {
+			document.getElementById('mainFrame').src = url;
+			setFrameHeight();
+		}
+	</script>
 
 </body>
+
 </html>

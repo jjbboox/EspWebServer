@@ -1,4 +1,3 @@
-
 var xmlhttp;
 if (window.XMLHttpRequest) {
     xmlhttp = new XMLHttpRequest();
@@ -11,22 +10,21 @@ xmlhttp.onreadystatechange = function () {
     var color = document.getElementById("RGBColor");
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         var obj = JSON.parse(xmlhttp.responseText);
-        if(btnLed) {
+        if (btnLed) {
             setLEDButton(document.getElementById("btnLed"), obj["ledstate"]);
         }
-        if(lang) {
+        if (lang) {
             for (var i = 0; i < lang.length; i++) {
                 if (obj["language"] == lang.options[i].value) {
                     lang.options[i].selected = "selected";
                 }
             }
         }
-        if(color) {
+        if (color) {
             color.value = obj["RGBColor"];
         }
         // showReturnMsg("Success","初始化完成");
-    }
-    else if (xmlhttp.readyState == 4) showReturnMsg("Error", "初始化失败");
+    } else if (xmlhttp.readyState == 4) showReturnMsg("Error", "初始化失败");
 };
 // showReturnMsg("Info", "正在进行页面初始化...");
 xmlhttp.open("GET", "Init", true);

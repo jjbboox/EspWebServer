@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="zh" class="no-js">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,38 +10,71 @@
 	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
 	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
 	<link rel="stylesheet" href="style.css"> <!-- Resource style -->
-	<script src="init.js"></script> <!-- Modernizr -->
+	<script src="js/jquery.js"></script>
 	<script defer="defer">
-        function setRGBLedColor(inputColor) {
-            var xmlhttp;
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            xmlhttp.onreadystatechange = function () {
-                
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    
-                }
-            };
-            xmlhttp.open("POST", "SetRGBColor", true);
-            xmlhttp.send("Color=" + inputColor.value);
-        };
+		// 初始化按钮状态
+		$(function(){
+			$.getJSON("Init", function(jsonObj){
+				if(jsonObj.RGBColor){
+					$('#RGBColor').val(jsonObj.RGBColor);
+				}
+				if(jsonObj.RGBBreath){
+					$('#isBreath').prop('checked', jsonObj.RGBBreath);
+				}
+			});
+		});
+		
+		function doAction() {
+			$.post("SetRGBColor", {
+				Color: $('#RGBColor').val(),
+				isBreath: $('#isBreath').prop('checked')
+			}, function(data, status){
+				switch(status) {
+					case	'success':
+						break;
+					case	'parsererror':
+					case	'timeout':
+					case	'notmodified':
+					case	'error':
+					default:
+						alert(status);
+						break;
+				}
+			});
+		}
+		$(document).ready(function(){
+			$("#RGBColor").change(function(){
+				doAction();
+			});
+			$("#isBreath").click(function(){
+				doAction();
+			});
+		});
 	</script>
 	<title>Esp8266 Home Center | jjbboox</title>
 </head>
+
 <body>
-	
+
 	<main>
 		<h1 class="title">RGB LED灯控制台</h1>
 		<center>
 			<ul class="row">
-				<li class="col" style="color:white;"><h2>RGB颜色</h2><p><input type="color" id="RGBColor" onchange="setRGBLedColor(this);"></input></p></li>
+				<li class="col" style="color:white;">
+					<h2>RGB颜色</h2>
+					<p><input type="color" id="RGBColor"></input></p>
+				</li>
+			</ul>
+			<ul class="row">
+				<li class="col" style="color: white;">
+					<h2><input type="checkbox" id="isBreath">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;呼吸</input></h2>
+					<p></p>
+				</li>
 			</ul>
 		</center>
 		<!-- all your content here -->
 	</main>
-	
+
 </body>
+
 </html>

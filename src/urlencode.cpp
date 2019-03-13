@@ -42,7 +42,7 @@ String urldecode(String str)
       encodedString += c;
     }
 
-    yield();
+    // yield();
   }
 
   return encodedString;
@@ -81,7 +81,7 @@ String urlencode(String str)
       encodedString += code[0];
       encodedString += code[1];
     }
-    yield();
+    // yield();
   }
   return encodedString;
 }

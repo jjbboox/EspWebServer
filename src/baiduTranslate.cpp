@@ -1,27 +1,55 @@
 #include <Arduino.h>
-#include <ESP8266HTTPClient.h>
+#ifdef ESP32
+    #include <HTTPClient.h>
+#elif defined(ESP8266)
+    #include <ESP8266HTTPClient.h>
+#endif
 #include <MD5Builder.h>
 #include "urlencode.h"
 #include <ArduinoJson.h>
 #include "unitoutf8.h"
 #include "baiduTranslate.h"
 
-const char *targetLanguage = "zh";
+String toLanguage;
 
-StaticJsonBuffer<2048> baiduJsonBuffer;
-
-String unicode2utf8(const String &uniStr);
+// String unicode2utf8(const String &uniStr);
 
 String baiduTranslate(String q, String from = "auto", String to = "zh")
 {
-    HTTPClient http;
     MD5Builder md5;
     md5.begin();
+    // q.replace("\n", "\\n");
+    Serial.println(q);
     long salt = random(1000, 1000000);
-    String sign = appid + q + String(salt) + apiKey;
+    String strSalt = String(salt);
+    
+    String sign = appid + q + strSalt + apiKey;
     md5.add(sign);
     md5.calculate();
     String md5sign = md5.toString();
+    String rtnStr;
+
+#if defined(ESP8266) || defined(HTTP_REMOTE_GET)
+    rtnStr = "{";
+    rtnStr += "\"Type\":\"object\",";
+    rtnStr += "\"Value\":{";
+    rtnStr +=   "\"url\":\"" + host + "\",";
+    rtnStr +=   "\"params\":{";
+    // rtnStr +=       "\"q\":\"" + (q) + "\",";
+    rtnStr +=       "\"from\":\"" + from + "\",";
+    rtnStr +=       "\"to\":\"" + to + "\",";
+    rtnStr +=       "\"appid\":\"" + appid + "\",";
+    rtnStr +=       "\"salt\":\"" + strSalt + "\",";
+    rtnStr +=       "\"sign\":\"" + md5sign + "\"";
+    rtnStr +=     "}";
+    rtnStr +=   "}";
+    rtnStr += "}";
+
+#else
+    // StaticJsonBuffer<2048> baiduJsonBuffer;
+    DynamicJsonBuffer baiduJsonBuffer;
+    WiFiClient client;
+    HTTPClient http;
     String url = host;
     url += "?q=" + urlencode(q) + "";
     url += "&from=" + from + "";
@@ -29,7 +57,10 @@ String baiduTranslate(String q, String from = "auto", String to = "zh")
     url += "&appid=" + appid;
     url += "&salt=" + String(salt);
     url += "&sign=" + md5sign + "";
-    http.begin(url);
+    
+    if(!http.begin(client, url)) {
+        return "***Error!http.begin failed";
+    }
     int httpCode = http.GET();
     String response = "";
     if (httpCode > 0)
@@ -46,7 +77,7 @@ String baiduTranslate(String q, String from = "auto", String to = "zh")
 
     http.end();
     response = UnicodeUtf8::unicode2utf8(response);
-    baiduJsonBuffer.clear();
+    // baiduJsonBuffer.clear();
     JsonObject &root = baiduJsonBuffer.parseObject(response);
     if (!root.success())
     {
@@ -61,5 +92,10 @@ String baiduTranslate(String q, String from = "auto", String to = "zh")
         resultStr += rs + "\n";
     }
 
-    return resultStr;
+    rtnStr = "{";
+    rtnStr += "'Type':'string',";
+    rtnStr += "'Value':'" + resultStr + "'";
+    rtnStr += "}";
+#endif
+    return rtnStr;
 }

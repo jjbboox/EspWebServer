@@ -2,73 +2,54 @@
 #include "myRTC.h"
 #include <time.h>
 
-bool g_Pir = false;
-int g_PirCount = 0;
-
-HumenActiveInfo hais[HUMENACTIVEINFO_CNT] = {{0, 0}};
-
-void pir_setup()
+void MyPir::begin()
 {
-    pinMode(pir_pin, INPUT);
-    for(int i = 0; i < HUMENACTIVEINFO_CNT; i++) {
-        hais[i].start_time = hais[i].end_time = 0;
-    }
-    g_Pir = getPirStatus();
-    if(g_Pir) {
-        hais[0].start_time = getRTCNow();
-        // // test code
-        // hais[1].end_time = getRTCNow() + 3758;
-        // hais[1].start_time = getRTCNow();
-    }
+    pinMode(pirPin, INPUT);
+    logs.clear();
 }
 
-void pir_loop()
+void MyPir::begin(int _pin)
 {
-    // 如果检测到人员开始活动
-    bool currentStatus = getPirStatus();
-    if(currentStatus != g_Pir) {
-        // Serial.print("pir status change(g_Pir, currentStatus):");
-        // Serial.print(g_Pir);
-        // Serial.print(",");
-        // Serial.println(currentStatus);
-        g_Pir = currentStatus;
-        time_t tmpTime = getRTCNow();
-        if(g_Pir) {
-            if((tmpTime - hais[0].end_time) <= MERGE_SECS) {
-                hais[0].end_time = 0;
+    pirPin = _pin;
+    begin();
+}
+
+bool MyPir::getPirStatus()
+{
+    return digitalRead(pirPin);
+}
+
+void MyPir::loop()
+{
+    int currentState = digitalRead(pirPin);
+    if(currentState != keepState) {
+        keepState = currentState;
+        time_t now = getRTCNow();
+        
+        // 上跳沿
+        if(currentState == HIGH) {
+            if(!logs.empty() && now - logs.front().end_time <= marginSecs) {
+                logs.front().end_time = 0;
             }
             else {
-                for(int i = HUMENACTIVEINFO_CNT - 1; i > 0; i--) {
-                    hais[i] = hais[i-1];
+                HumenActiveInfo newLog;
+                newLog.start_time = now;
+                newLog.end_time = 0;
+                logs.insert(logs.begin(), newLog);
+                if(logMaxSize > 0 && logs.size() > logMaxSize) {
+                    logs.erase(logs.end() - (logs.size() - logMaxSize), logs.end());
                 }
-                hais[0].start_time = tmpTime;
-                hais[0].end_time = 0;
             }
         }
+        // 下降沿
         else {
-            hais[0].end_time = tmpTime;
+            logs.front().end_time = now;
         }
-        // for(int i = 0; i < HUMENACTIVEINFO_CNT; i++) {
-        //     Serial.printf("hais[%d]=(%ul, %ul)\r\n", i, hais[i].start_time, hais[i].end_time);
-        // }
     }
 }
 
-inline bool getPirStatus()
+bool MyPir::isHumenActive()
 {
-    return digitalRead(pir_pin) == HIGH;
+    return keepState == HIGH;
 }
 
-bool isHumenActive()
-{
-    return getPirStatus();
-}
-
-HumenActiveInfo* getPirLogs() {
-    return hais;
-}
-
-int getPirLogsLength()
-{
-    return HUMENACTIVEINFO_CNT;
-}

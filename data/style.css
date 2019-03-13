@@ -1,47 +1,54 @@
 body {
     padding: 5px 10px 5px 10px;
-    color: cornflowerblue;
+    color: floralwhite;
 }
 
 h3 {
     font-size: x-large;
 }
+
 p {
     font-size: large;
     padding: 10px 0px 5px;
 }
+
 .inputCtrl {
-    background-color: floralwhite;
-    color: firebrick;
+    color: floralwhite;
 }
-select,textarea {
+
+select,
+textarea {
     width: 100%;
-    font-size: medium;
-    color: cornflowerblue;
-    padding: 5px 10px 5px 10px;
-    border-radius: 5px;
-    border: 2px solid cornflowerblue;
+    font-size: 2.0rem;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #9e8bdf;
+    border: 2px solid #2ecc71;
 }
+
 textarea {
     height: 160px;
-    font-size: large;
 }
+
 button {
     font-size: large;
     color: cornflowerblue;
-    padding: 5px 10px 5px 10px; 
+    padding: 5px 10px 5px 10px;
     border-radius: 5px;
-    border: 5px solid cornflowerblue;
+    border: 2px solid #2ecc71;
 }
+
 .response {
     font-size: x-large;
-    font-style:italic;
-    font-weight:bold;
+    font-style: italic;
+    font-weight: bold;
     color: rgb(255, 254, 168);
 }
+
 .Success {
     color: rgb(196, 255, 168);
 }
+
 .Error {
     color: rgb(255, 158, 158);
 }
@@ -60,18 +67,18 @@ button {
 */
 
 hr {
-    border-style:dotted;
-    border-width:thin;
+    border-style: dotted;
+    border-width: thin;
 }
 
 .flexBox {
     width: 100%;
-	display: flex;
+    display: flex;
 }
 
 .inputRow {
-	list-style:none;
-    display:flex;
+    list-style: none;
+    display: flex;
     width: 100%;
 }
 
@@ -88,7 +95,7 @@ hr {
 }
 
 ul {
-    display:flex;
+    display: flex;
     width: 80%;
 }
 
@@ -101,6 +108,18 @@ li .label {
 
 .datarow {
     height: 40px;
+}
+
+.data-row-value {
+    text-align: left;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.data-row-title {
+    text-align: right;
+    padding-left: 10px;
+    vertical-align: middle;
 }
 
 .cvalue {
@@ -117,7 +136,7 @@ li .label {
     font-size: large;
     width: 110px;
     margin: auto;
-    color:white;
+    color: white;
     background-color: rgb(40, 128, 20);
     vertical-align: middle;
     border-radius: 10px;
@@ -125,20 +144,20 @@ li .label {
 }
 
 .logline {
-    display:flex;
-    width:100%;
+    display: flex;
+    width: 100%;
 }
 
 .logline .datetime {
-    flex:3;
-    text-align:left;
+    flex: 3;
+    text-align: left;
     padding: 3px 10px 3px 10px;
 }
 
 .logline .mins {
-    flex:1;
+    flex: 1;
     padding: 3px 10px 3px 10px;
-    color:white;
+    color: white;
 }
 
 .title {
@@ -156,6 +175,22 @@ li .label {
     padding: 2em;
 }
 
+.col input[type='button'] {
+    font-size: larger;
+    border: 0;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline: none;
+    color: #2ecc71;
+    border-radius: 10px;
+    transition: 0.25s;
+    cursor: pointer;
+
+}
+
 h2 {
     font-size: x-large;
     padding-top: 5;
@@ -167,41 +202,44 @@ h2 {
     width: 300px;
     padding: 40px;
     position: absolute;
-    top:50%;
-    left:50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
 
 }
+
 .box h1 {
     color: white;
     /*text-transform: uppercase;*/
     font-weight: 500;
 
 }
+
 .box input[type='button'] {
     font-size: larger;
     border: 0;
     display: block;
     margin: 20px auto;
     text-align: center;
-    border: 2px solid rgb(64, 64, 255);
+    border: 2px solid #2ecc71;
     padding: 14px 40px;
     outline: none;
-    color : white;
-    border-radius : 30px;
+    color: white;
+    border-radius: 30px;
     transition: 0.25s;
     cursor: pointer;
 
 }
 
 .ledon {
-    background: rgb(96, 64, 255);
+    background: #2ecc71;
 }
 
 .ledoff {
     background: none;
 }
+
 /*
 .ledon:hover {
     background: none;
@@ -215,4 +253,41 @@ h2 {
 .dht li {
     border-radius: 70% 30%;
     color: white;
+}
+
+input[type='color'] {
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+input[type=checkbox]:after {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 14px;
+    font-size: 16px;
+    color: #fff;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+input[type=checkbox]:checked:after {
+    content: '\2714';
+    background-color: #5774FF;
+}
+
+.refreshBtn {
+    font-size: 1.2em;
+    border: 2px white solid;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 5px,20px,5px,20px;
+    color: white;
+    background-color: darkgoldenrod;
 }

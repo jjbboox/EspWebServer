@@ -1,34 +1,72 @@
+#include <Arduino.h>
+#ifdef ESP32
+#include <analogWrite.h>
+#endif
 #include "myRGBLed.h"
 
-RGBColor g_color;
-
-void RGB_setup()
+void RGBColorLED::begin()
 {
-    setRGBColor(0, 0, 0);
+#ifdef ESP32
+    analogWriteResolution(RedPin, 12);
+    analogWriteResolution(GreenPin, 12);
+    analogWriteResolution(BluePin, 12);
+#endif
+    setColor(0, 0, 0);
 }
 
-void setRGBColor(uint8_t red, uint8_t green, uint8_t blue)
+void RGBColorLED::setColor(uint8_t _red, uint8_t _green, uint8_t _blue)
 {
-    g_color.red = red;
-    g_color.green = green;
-    g_color.blue = blue;
-    analogWrite(RED_PIN, g_color.red);
-    analogWrite(GREEN_PIN, g_color.green);
-    analogWrite(BLUE_PIN, g_color.blue);
+    Color.red = _red;
+    Color.green = _green;
+    Color.blue = _blue;
+    show();
 }
 
-void setRGBColor(const RGBColor& color)
+void RGBColorLED::setColor(const RGBColor& _color)
 {
-    setRGBColor(color.red, color.green, color.blue);
+    setColor(_color.red, _color.green, _color.blue);
 }
 
-void RGB_loop()
+void RGBColorLED::setColor(const String& strColor)
 {
-
+    setColor(convertColor(strColor));
 }
 
-RGBColor convertToColor(String strColor)
+void RGBColorLED::show()
 {
+    if(!breath) {
+        show(Color.red, Color.green, Color.blue);
+    }
+    else {
+        breath_timeout = 0;
+        breath_start = 0;
+    }
+}
+
+void RGBColorLED::show(uint8_t _red, uint8_t _green, uint8_t _blue)
+{
+    analogWrite(RedPin, _red);
+    analogWrite(GreenPin, _green);
+    analogWrite(BluePin, _blue);
+}
+
+void RGBColorLED::show(const RGBColor& _color)
+{
+    show(_color.red, _color.green, _color.blue);
+}
+
+String RGBColorLED::getHTMLColorStr()
+{
+    uint32_t uColor;
+    uColor = (Color.red << 16) + (Color.green << 8) + Color.blue;
+    String rgbStr = "#";
+    rgbStr += String(uColor, HEX);
+    return rgbStr;
+}
+
+RGBColor RGBColorLED::convertColor(const String& scolor)
+{
+    String strColor = scolor;
     strColor.toLowerCase();
     RGBColor color;
     color.green = color.red = color.blue = 0;
@@ -48,4 +86,32 @@ RGBColor convertToColor(String strColor)
         color.blue = ucolor & 0xff;
     }
     return color;
+}
+
+void RGBColorLED::loop()
+{
+    if(breath) {
+        uint32_t now = millis();
+        if(breath_timeout < now) {
+            breath_timeout = now + BREATH_TICK_MS;
+            uint32_t breath_end = breath_start + BREATH_MS;
+            
+            if(breath_end < now ) {
+                breath_start = now;
+                breath_end = now + BREATH_MS;
+            }
+            
+            RGBColor tmpColor;
+            uint32_t breath_ms_now = now - breath_start;
+            
+            if(breath_ms_now > BREATH_HALF_MS) {
+                breath_ms_now = breath_end - now;
+            }
+            tmpColor.red = Color.red * breath_ms_now / BREATH_HALF_MS;
+            tmpColor.green = Color.green * breath_ms_now / BREATH_HALF_MS;
+            tmpColor.blue = Color.blue * breath_ms_now / BREATH_HALF_MS;
+            show(tmpColor);
+        }
+    }
+    
 }

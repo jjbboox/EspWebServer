@@ -10,12 +10,12 @@ volatile bool refreshflag = false;
 void rtc_isr()
 {
     g_time_now++;
-    refreshflag = (g_time_now % REFRESH_SEC == 0);
+    // refreshflag = (g_time_now % REFRESH_SEC == 0);
 }
 
 void rtc_setup()
 {
-    pinMode(RTC_CLOCK_INTERRUPT_PIN, INPUT);
+    pinMode(RTC_CLOCK_INTERRUPT_PIN, INPUT_PULLUP);
     Rtc.Begin();
 
     if (!Rtc.GetIsRunning())
@@ -27,20 +27,21 @@ void rtc_setup()
     // never assume the Rtc was last configured by you, so
     // just clear them to your needed state
     Rtc.Enable32kHzPin(false);
-    // Rtc.SetSquareWavePin(DS3231SquareWavePin_ModeClock);
-    // Rtc.SetSquareWavePinClockFrequency(DS3231SquareWaveClock_1Hz);
+    Rtc.SetSquareWavePin(DS3231SquareWavePin_ModeClock);
+    Rtc.SetSquareWavePinClockFrequency(DS3231SquareWaveClock_1Hz);
 
     g_rtc_now = Rtc.GetDateTime();
     g_time_now = convertRTC2Time(g_rtc_now);
-    char* dtStr = getDateTimeStr(g_time_now, 8 * 3600);
-    Serial.println(dtStr);
+    
+    Serial.println(getDateTimeStr(g_time_now, 8 * 3600));
+
     delay(20);
-    // attachInterrupt(RTC_CLOCK_INTERRUPT_PIN, rtc_isr, RISING);
+    attachInterrupt(RTC_CLOCK_INTERRUPT_PIN, rtc_isr, FALLING);
 }
 
 void rtc_loop()
 {
-    // // 如果更新标志为真，则重新从RTC中读取时间
+    // 如果更新标志为真，则重新从RTC中读取时间
     // if (refreshflag)
     // {
     //     g_rtc_now = Rtc.GetDateTime();
@@ -66,19 +67,19 @@ time_t localDateTime(const RtcDateTime &rtc_datetime, const int timezone_ms)
     return convertRTC2Time(rtc_datetime) + timezone_ms;
 }
 
-char* getDateTimeStr(time_t time, const int timezone_ms)
+String getDateTimeStr(time_t time, const int timezone_ms)
 {
     time += timezone_ms;
     struct tm *tblock;
     tblock = localtime(&time);
-    static char datetime[20];
+    char datetime[20];
     sprintf(datetime, "%04d-%02d-%02d %02d:%02d:%02d",
             tblock->tm_year + 1970, tblock->tm_mon + 1, tblock->tm_mday,
             tblock->tm_hour, tblock->tm_min, tblock->tm_sec);
-    return datetime;
+    return String(datetime);
 }
 
-char* getCurrentRtcDTStr(const int timezone_ms)
+String getCurrentRtcDTStr(const int timezone_ms)
 {
     time_t t = getRTCNow();
     return getDateTimeStr(t, timezone_ms);
