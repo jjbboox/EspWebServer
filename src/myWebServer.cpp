@@ -8,10 +8,8 @@
 #include <ESPAsyncWebServer.h>
 #include "myWebServerHandle.h"
 
-const char* ssid = "TP-LINK_71D506";
-const char* password =  "ci14sd6cj1039";
-// const char* ssid = "Honor 9";
-// const char* password =  "18049871975";
+const char* ssid = "xxxxxxxx";
+const char* password =  "xxxxxxxxxxx";
 
 AsyncWebServer server(80);
 
