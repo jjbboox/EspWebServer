@@ -26,7 +26,7 @@ void myWebServerOnSetup()
     server.on("/Translate", HTTP_POST, handleTranslate);
     server.on("/HeWeather", HTTP_GET, [](AsyncWebServerRequest* request){
         // 获取和风天气的APIKey
-        request->send(200, "text/plain", "4c318c4fede4483db391c1bbef549f01");
+        request->send(200, "text/plain", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     });
 }
 
